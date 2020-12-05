@@ -1,4 +1,6 @@
-﻿using FormManager.Domain.Entities;
+﻿using FormManager.Application.Common.Interfaces;
+using FormManager.Application.Common.Models;
+using FormManager.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,14 +10,20 @@ using System.Threading.Tasks;
 
 namespace FormManager.Application.Users.Queries
 {
-    public class GetUsersQuery : IRequest<List<User>>
+    public class GetUsersQuery : RequestQuery<Pagination<User>> {}
+
+    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Pagination<User>>
     {
-    }
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<User>>
-    {
-        public Task<List<User>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        private readonly IUserRepository repository;
+
+        public GetUsersQueryHandler(IUserRepository repository)
         {
-            throw new NotImplementedException();
+            this.repository = repository;
+        }
+
+        public async Task<Pagination<User>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        {
+            return await repository.QueryUsersAsync(request);
         }
     }
 }

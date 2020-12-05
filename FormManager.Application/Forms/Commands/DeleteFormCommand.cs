@@ -13,15 +13,13 @@ namespace FormManager.Application.Forms.Commands
 {
     public class DeleteFormCommand : IRequest<bool>
     {
-        private Guid id;
-
+        public Guid Id { get; set; }
         public DeleteFormCommand(Guid id)
         {
-            this.id = id;
+            this.Id = id;
         }
-
-        public Guid Id { get; set; }
     }
+
     public class DeleteFormCommandHandler : IRequestHandler<DeleteFormCommand, bool>
     {
         private readonly IAppDbContext context;

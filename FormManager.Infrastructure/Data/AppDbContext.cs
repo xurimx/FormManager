@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FormManager.Infrastructure.Data
 {
-    class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         public DbSet<Form> Forms { get; set; }
         public AppDbContext(DbContextOptions options) : base(options) { }

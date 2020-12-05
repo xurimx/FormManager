@@ -8,6 +8,7 @@ using FormManager.Api.ViewModels;
 using FormManager.Application.Forms.Queries;
 using FormManager.Domain.Entities;
 using FormManager.Application.Forms.Commands;
+using FormManager.Application.Common.Models;
 
 namespace FormManager.Api.Controllers
 {
@@ -15,9 +16,9 @@ namespace FormManager.Api.Controllers
     public class FormsController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Form>>> GetForms()
+        public async Task<ActionResult<Pagination<Form>>> GetForms([FromQuery]GetFormsQuery query)
         {
-            return await Mediator.Send(new GetFormsQuery());
+            return await Mediator.Send(query);
         }
 
         [HttpGet("{id}")]

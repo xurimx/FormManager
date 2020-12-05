@@ -11,6 +11,6 @@ namespace FormManager.Domain.Entities
         public string Email { get; set; }
         public string Username { get; set; }
         public string[] Roles { get; set; }
-        public Claim[] Claims { get; set; }
+        public Dictionary<string, string[]> Claims { get; set; }
     }
 }

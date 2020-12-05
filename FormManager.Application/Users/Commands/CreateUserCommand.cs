@@ -2,6 +2,7 @@
 using FormManager.Application.Common.Interfaces;
 using FormManager.Domain.Entities;
 using MediatR;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,8 +15,9 @@ namespace FormManager.Application.Users.Commands
     {
         public string Username { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public string Role { get; set; }
+        [JsonIgnore]
+        public string Password { get; set; }
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, string>

@@ -14,7 +14,7 @@ namespace FormManager.Api.Controllers
 {
     public class AccountController : BaseApiController
     {
-        [HttpPost]
+        [HttpPost("authenticate")]
         public async Task<ActionResult<TokenResponse>> GetToken([FromBody] AuthenticateCommand login)
         {
             return await Mediator.Send(login);
@@ -42,12 +42,6 @@ namespace FormManager.Api.Controllers
             return claims;
         }
 
-        [HttpPost("createuser")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> CreateUserAsync(CreateUserCommand register)
-        {
-            return Ok(await Mediator.Send(register));
-        }
     }
 }
 
