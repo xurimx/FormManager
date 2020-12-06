@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormManager.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormManager.Domain", "FormManager.Domain\FormManager.Domain.csproj", "{3331A1DB-87E4-4644-887E-288FBE4D8E3F}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "FormManager.Ui", "FormManager.Ui\FormManager.Ui.njsproj", "{BD1AB3F9-EA05-402F-A555-B79B5B1F98BE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{3331A1DB-87E4-4644-887E-288FBE4D8E3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3331A1DB-87E4-4644-887E-288FBE4D8E3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3331A1DB-87E4-4644-887E-288FBE4D8E3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD1AB3F9-EA05-402F-A555-B79B5B1F98BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD1AB3F9-EA05-402F-A555-B79B5B1F98BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD1AB3F9-EA05-402F-A555-B79B5B1F98BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD1AB3F9-EA05-402F-A555-B79B5B1F98BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
