@@ -10,6 +10,8 @@ namespace FormManager.Application.Common.Interfaces
     public interface IAppDbContext
     {
         DbSet<Form> Forms { get; set; }
+        DbSet<Domain.Entities.Config> Configs { get; set; }
         Task<int> SaveChangesAsync();
+
     }
 }

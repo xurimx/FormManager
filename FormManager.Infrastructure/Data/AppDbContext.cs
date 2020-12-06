@@ -13,11 +13,20 @@ namespace FormManager.Infrastructure.Data
     public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         public DbSet<Form> Forms { get; set; }
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        public DbSet<Config> Configs { get; set; }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { 
+            
+        }
 
         public Task<int> SaveChangesAsync()
         {
             return base.SaveChangesAsync();
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Config>().HasKey(c => c.Key);
+            base.OnModelCreating(builder);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace FormManager.Infrastructure.Services
                     var predicate = PredicateBuilder.New<ApplicationUser>();
                     foreach (var column in request.SearchColumns)
                     {
-                        ParameterExpression param = Expression.Parameter(typeof(ApplicationUser), "form");
+                        ParameterExpression param = Expression.Parameter(typeof(ApplicationUser), "user");
                         MemberExpression property = Expression.Property(param, column);
                         MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
                         ConstantExpression inputValue = Expression.Constant(request.SearchInput, typeof(string));
@@ -99,13 +99,13 @@ namespace FormManager.Infrastructure.Services
             }
             if (!string.IsNullOrEmpty(request.OrderBy))
             {
-                ParameterExpression param = Expression.Parameter(typeof(Form), "x");
+                ParameterExpression param = Expression.Parameter(typeof(ApplicationUser), "x");
                 MemberExpression property = Expression.Property(param, request.OrderBy);
                 var lambda = Expression.Lambda(property, param);
 
                 var orderBy = Expression.Call(typeof(Queryable),
                                 request.OrderDirection != "desc" ? "OrderBy" : "OrderByDescending",
-                                new Type[] { typeof(Form), property.Type },
+                                new Type[] { typeof(ApplicationUser), property.Type },
                                 query.Expression,
                                 Expression.Quote(lambda));
 
@@ -122,7 +122,7 @@ namespace FormManager.Infrastructure.Services
 
             Pagination<User> pagination = new Pagination<User>
             {
-                TotalItems = await context.Forms.CountAsync(),
+                TotalItems = await context.Users.CountAsync(),
                 FilteredItems = filtered,
                 Page = page,
                 Items = mappedUsers,

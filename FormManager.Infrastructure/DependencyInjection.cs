@@ -17,7 +17,9 @@ namespace FormManager.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("dev");
+                //options.UseInMemoryDatabase("dev");
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                //options.UseMySQL("");
             });
 
             services.AddScoped<IAppDbContext>(cfg => cfg.GetRequiredService<AppDbContext>());
@@ -37,11 +39,12 @@ namespace FormManager.Infrastructure
                 });
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<ISmtpConfigurationService, SmtpConfigurationService>();
+            services.AddTransient<ISmtpClientFactory, SmtpClientFactory>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }
-
     }
 }

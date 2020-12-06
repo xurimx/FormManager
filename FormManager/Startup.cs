@@ -30,6 +30,15 @@ namespace FormManager.Api
 
             services.AddControllers();
 
+            services.AddCors(opt=> {
+                opt.AddPolicy("all",cfg =>
+                {
+                    cfg.AllowAnyOrigin();
+                    cfg.AllowAnyMethod();
+                    cfg.AllowAnyHeader();
+                });
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FormManager", Version = "v1" });
@@ -41,7 +50,7 @@ namespace FormManager.Api
                     Type = SecuritySchemeType.ApiKey
                 });
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
-            });           
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,9 +58,10 @@ namespace FormManager.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FormManager v1"));
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FormManager v1"));
+            app.UseCors("all");
 
             app.UseHttpsRedirection();
 

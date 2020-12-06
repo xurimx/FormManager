@@ -16,12 +16,14 @@ namespace FormManager.Api.Controllers
     public class FormsController : BaseApiController
     {
         [HttpGet]
+        [Authorize(Roles ="admin")]
         public async Task<ActionResult<Pagination<Form>>> GetForms([FromQuery]GetFormsQuery query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Form>> GetForm(Guid id)
         {
             return await Mediator.Send(new GetFormByIdQuery(id));
@@ -35,6 +37,7 @@ namespace FormManager.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteForm(Guid id)
         {
             bool deleted = await Mediator.Send(new DeleteFormCommand(id));
