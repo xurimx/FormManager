@@ -1,22 +1,41 @@
 <template>
     <div class="home">
-        Login Page
+        <input type="text" v-model="username">
+        <input type="password" v-model="password">
+        <input type="submit" value="Submit" @click="login">
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions, mapGetters} from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
+    //import axios from '../utils/api';
 
     export default {
         name: 'Home',
-        computed: {...mapState('users', ['message']), ...mapGetters(['token'])},
+        data() {
+            return {
+                username: '',
+                password: '',
+            }
+        },
+        computed: {...mapGetters(['token', 'role'])},
         components: {},
         methods: {
-            ...mapActions(['authenticate'])
+            ...mapActions(['authenticate', 'userinfo']),
+            login: async function () {
+                await this.authenticate({
+                    'username': this.username,
+                    'password': this.password
+                });
+
+                await this.userinfo();
+
+                if (this.role === 'admin') {
+                    this.$router.push('Admin');
+                } else {
+                    this.$router.push('Form');
+                }
+            }
         },
-        async created() {
-            await this.authenticate({username: 'admin', password: 'P@ssw0rd'});
-            console.log(this.token);
-        }
     }
 </script>
