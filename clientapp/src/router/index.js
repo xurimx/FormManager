@@ -9,7 +9,7 @@ import NotFound from "../views/NotFound";
 
 const routes = [
     {path: '/', name: 'Home', component: Home},
-    {path: '/submit', name: 'Form', component: Form},
+    {path: '/form', name: 'Form', component: Form},
 
     {path: '/admin', name: 'Admin',component: Admin,
         children: [
