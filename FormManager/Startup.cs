@@ -1,4 +1,5 @@
 using AutoMapper;
+using FormManager.Api.Middlewares;
 using FormManager.Api.Services;
 using FormManager.Application;
 using FormManager.Application.Common.Interfaces;
@@ -30,13 +31,14 @@ namespace FormManager.Api
 
             services.AddControllers();
 
-            services.AddCors(opt=> {
-                opt.AddPolicy("all",cfg =>
-                {
-                    cfg.AllowAnyOrigin();
-                    cfg.AllowAnyMethod();
-                    cfg.AllowAnyHeader();
-                });
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("all", cfg =>
+                 {
+                     cfg.AllowAnyOrigin();
+                     cfg.AllowAnyMethod();
+                     cfg.AllowAnyHeader();
+                 });
             });
 
             services.AddSwaggerGen(c =>
@@ -59,6 +61,14 @@ namespace FormManager.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseMiddleware<ExceptionMiddleware>();
+            }
+
+            //app.UseMiddleware<ExceptionMiddleware>();
+
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FormManager v1"));
             app.UseCors("all");

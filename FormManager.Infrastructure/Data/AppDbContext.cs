@@ -14,6 +14,7 @@ namespace FormManager.Infrastructure.Data
     {
         public DbSet<Form> Forms { get; set; }
         public DbSet<Config> Configs { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { 
             
         }

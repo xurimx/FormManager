@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FormManager.Api.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace FormManager.Api.Controllers
 {
     [Route("api/[controller]")]
+    [ProducesResponseType(typeof(ErrorResponse), 400)]
     [ApiController]
     public abstract class BaseApiController : ControllerBase
     {
