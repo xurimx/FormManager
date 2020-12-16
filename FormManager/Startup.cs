@@ -57,6 +57,8 @@ namespace FormManager.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,9 +67,6 @@ namespace FormManager.Api
             {
                 app.UseMiddleware<ExceptionMiddleware>();
             }
-
-            //app.UseMiddleware<ExceptionMiddleware>();
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FormManager v1"));

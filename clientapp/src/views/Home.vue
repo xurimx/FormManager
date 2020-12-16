@@ -4,6 +4,7 @@
         <input type="password" v-model="password">
         <input type="submit" value="Submit" @click="login">
     </div>
+
 </template>
 
 <script>
@@ -21,7 +22,7 @@
         computed: {...mapGetters(['token', 'role'])},
         components: {},
         methods: {
-            ...mapActions(['authenticate', 'userinfo']),
+            ...mapActions(['authenticate', 'userinfo', 'resetState']),
             login: async function () {
                 await this.authenticate({
                     'username': this.username,
@@ -35,6 +36,10 @@
                 } else {
                     this.$router.push('Form');
                 }
+            },
+            logout: function(){
+                this.resetState();
+                this.$router.push('/');
             }
         },
     }

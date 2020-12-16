@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace FormManager.Infrastructure.Data
 {
@@ -26,7 +28,11 @@ namespace FormManager.Infrastructure.Data
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
             optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
-            //optionsBuilder.UseMySQL("");
+            //optionsBuilder.UseMySql(config.GetConnectionString("MysqlConnection"), 
+            //    new MariaDbServerVersion(new Version(10, 4, 11)),
+            //            mySqlOptions => mySqlOptions
+            //                .CharSetBehavior(CharSetBehavior.NeverAppend));
+
             return new AppDbContext(optionsBuilder.Options);
         }
     }

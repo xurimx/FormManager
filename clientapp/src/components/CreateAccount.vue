@@ -26,10 +26,6 @@
                     email: this.email,
                     password: this.password,
                     role: 'user',
-                },{
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token,
-                    }
                 });
                 this.username = '';
                 this.email = '';

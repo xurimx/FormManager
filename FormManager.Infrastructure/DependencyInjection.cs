@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using FormManager.Application.Common.Interfaces;
 using FormManager.Infrastructure.Services;
+using System;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace FormManager.Infrastructure
 {
@@ -19,7 +21,11 @@ namespace FormManager.Infrastructure
             {
                 //options.UseInMemoryDatabase("dev");
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                //options.UseMySQL("");
+                //options.UseMySql(configuration.GetConnectionString("MysqlConnection"),
+                //new MariaDbServerVersion(new Version(10, 4)),
+                //        mySqlOptions => mySqlOptions
+                //            .CharSetBehavior(CharSetBehavior.NeverAppend));
+
             });
 
             services.AddScoped<IAppDbContext>(cfg => cfg.GetRequiredService<AppDbContext>());

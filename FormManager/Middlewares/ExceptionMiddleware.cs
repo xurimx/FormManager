@@ -1,5 +1,7 @@
-﻿using FormManager.Api.Responses;
+﻿using FluentValidation;
+using FormManager.Api.Responses;
 using FormManager.Application.Common.Exceptions;
+using FormManager.Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -24,6 +26,14 @@ namespace FormManager.Api.Middlewares
             try
             {
                 await next(context);
+            }
+            catch (ValidationException e)
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = 400;
+                List<Error> erros = e.Errors.Select(x => new Error { Title = x.PropertyName, Description = x.ErrorMessage }).ToList();
+                ErrorResponse errorResponse = new ErrorResponse("Validation Failed", 400, erros);
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(errorResponse));
             }
             catch (Exception e)
             {

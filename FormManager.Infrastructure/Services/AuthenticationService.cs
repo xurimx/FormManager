@@ -20,6 +20,7 @@ namespace FormManager.Infrastructure.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
+        //Todo: slap an interface to UserManager
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IConfiguration config;
         private readonly IAppDbContext context;

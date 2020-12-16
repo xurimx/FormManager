@@ -1,6 +1,7 @@
 ﻿using FormManager.Application.Common.Exceptions;
 using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
+using FormManager.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,17 +22,19 @@ namespace FormManager.Infrastructure.Services
         }
         public async Task<SmtpConfiguration> GetConfiguration()
         {
-            PropertyInfo[] properties = typeof(SmtpConfiguration).GetProperties();
-            SmtpConfiguration cfg = new SmtpConfiguration();
             try
             {
-                var configs = context.Configs.ToList();
-                foreach (var prop in properties)
+                var configs = await context.Configs.ToListAsync();
+                SmtpConfiguration cfg = new SmtpConfiguration
                 {
-                    Domain.Entities.Config config = configs.Where(x => x.Key == prop.Name).First();
-                    cfg.GetType().GetProperty(prop.Name).SetValue(cfg, config.Value);
-                }
-                return await Task.FromResult(cfg);
+                    From = configs.First(x => x.Key == "From").Value,
+                    Host = configs.First(x => x.Key == "Host").Value,
+                    Password = configs.First(x => x.Key == "Password").Value,
+                    Port = configs.First(x => x.Key == "Port").Value,
+                    To = configs.First(x => x.Key == "To").Value,
+                    Username = configs.First(x => x.Key == "Username").Value
+                };
+                return cfg;
             }
             catch (Exception e)
             {
@@ -42,13 +45,12 @@ namespace FormManager.Infrastructure.Services
         public async Task UpdateConfiguration(SmtpConfiguration configuration)
         {
             PropertyInfo[] props = configuration.GetType().GetProperties();
-
             foreach (var prop in props)
             {
-                Domain.Entities.Config config = context.Configs.Where(x => x.Key == prop.Name).FirstOrDefault();
+                Config config = context.Configs.Where(x => x.Key == prop.Name).FirstOrDefault();
                 if (config == null)
                 {
-                    config = new Domain.Entities.Config
+                    config = new Config
                     {
                         Key = prop.Name,
                         Value = (string)prop.GetValue(configuration)

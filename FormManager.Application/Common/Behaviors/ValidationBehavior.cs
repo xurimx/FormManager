@@ -28,7 +28,6 @@ namespace FormManager.Application.Common.Behaviors
             {
                 throw new ValidationException(failures);
             }
-
             return next();
         }
     }

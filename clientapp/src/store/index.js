@@ -6,6 +6,7 @@ import axios from '../utils/api';
 const initState = () => ({
     message: 'hello vuex',
     token: null,
+    refreshToken: null,
     role: '',
     active: false,
     ready: false,
@@ -18,6 +19,7 @@ const store = createStore({
         authenticate: async ({commit}, {username, password}) => {
             let response = await axios.post('account/authenticate', {username, password});
             commit('setToken', {token: response.data.token});
+            commit('setRefreshToken', {refreshToken: response.data.refreshToken});
         },
         userinfo: async ({commit, state}) => {
             try {
@@ -52,6 +54,9 @@ const store = createStore({
         setToken: (state, {token}) => {
             state.token = token;
         },
+        setRefreshToken: (state, {refreshToken}) =>{
+            state.refreshToken= refreshToken
+        },
         setRole: (state, {role}) => {
             state.role = role;
         },
@@ -60,9 +65,16 @@ const store = createStore({
         },
         initialiseStore: (state) => {
             let token = localStorage.getItem('token');
+            let refresh = localStorage.getItem('refreshToken');
             if (token != null) {
                 state.token = token;
             }
+            if (refresh != null){
+                state.refreshToken = refresh;
+            }
+        },
+        resetState: state => {
+            Object.assign(state, initState)
         }
     }
 });
@@ -70,4 +82,9 @@ const store = createStore({
 store.subscribe((mutation, state) => {
     localStorage.setItem('token', state.token);
 });
+
+store.subscribe((mutation, state) => {
+    localStorage.setItem('refreshToken', state.refreshToken);
+});
+
 export default store;

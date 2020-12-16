@@ -1,6 +1,8 @@
+using FormManager.Infrastructure.Data;
 using FormManager.Infrastructure.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,10 @@ namespace FormManager.Api
         {
             using (var scope = host.Services.CreateScope())
             {
+                var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                ctx.Database.Migrate();
+                //bool v = ctx.Database.EnsureCreated();
+
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 ApplicationUser admin = await userManager.FindByNameAsync("admin");
@@ -52,8 +58,6 @@ namespace FormManager.Api
                     }
                     await userManager.AddToRoleAsync(admin, "admin");
                 }
-
-
             }
         }
 

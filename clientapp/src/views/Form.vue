@@ -38,10 +38,6 @@
                     telephone: this.tel,
                     company: this.company,
                     appointment: this.appointment,
-                }, {
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token,
-                    },
                 });
                 this.name = '';
                 this.email = '';
@@ -50,7 +46,7 @@
                 this.appointment = '';
             }
         },
-        computed: {...mapGetters(['token', 'Test'])},
+        computed: {...mapGetters(['token'])},
     }
 </script>
 
