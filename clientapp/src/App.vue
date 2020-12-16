@@ -8,7 +8,7 @@
 
 <script>
 
-    import {mapActions, mapMutations, mapGetters} from 'vuex';
+    import {mapActions, mapGetters} from 'vuex';
     import Toast from "./components/Toast";
 
     export default {
@@ -31,7 +31,6 @@
         computed: {...mapGetters(['role', 'ready'])},
         methods: {
             ...mapActions(['userinfo']),
-            ...mapMutations(['setToken']),
         }
     }
 

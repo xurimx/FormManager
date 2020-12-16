@@ -10,6 +10,7 @@
 
 
     <input type="submit" @click="dataPost">
+    <span v-if="error">{{error}}</span>
 
 </template>
 
@@ -27,23 +28,27 @@
                 tel: '',
                 company: '',
                 appointment: '',
+                error: ''
             }
         },
         methods: {
             dataPost: async function () {
-
-               await axios.post('Forms', {
-                    name: this.name,
-                    email: this.email,
-                    telephone: this.tel,
-                    company: this.company,
-                    appointment: this.appointment,
-                });
-                this.name = '';
-                this.email = '';
-                this.tel = '';
-                this.company = '';
-                this.appointment = '';
+                try {
+                    await axios.post('Forms', {
+                        name: this.name,
+                        email: this.email,
+                        telephone: this.tel,
+                        company: this.company,
+                        appointment: this.appointment,
+                    });
+                    this.name = '';
+                    this.email = '';
+                    this.tel = '';
+                    this.company = '';
+                    this.appointment = '';
+                }catch (e) {
+                    this.error = e.response.data.Description;
+                }
             }
         },
         computed: {...mapGetters(['token'])},
