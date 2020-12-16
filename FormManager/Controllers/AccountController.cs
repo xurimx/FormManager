@@ -15,6 +15,7 @@ namespace FormManager.Api.Controllers
     public class AccountController : BaseApiController
     {
         [HttpPost("authenticate")]
+        [ProducesResponseType(typeof(TokenResponse), 200)]
         public async Task<ActionResult<TokenResponse>> GetToken([FromBody] AuthenticateCommand login)
         {
             return await Mediator.Send(login);
@@ -22,6 +23,7 @@ namespace FormManager.Api.Controllers
 
         [HttpGet("userinfo")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ProducesResponseType(typeof(UserInfo), 200)]
         public ActionResult<UserInfo> UserInfo()
         {
             var claims = new UserInfo
@@ -42,6 +44,12 @@ namespace FormManager.Api.Controllers
             return claims;
         }
 
+        [HttpPost("refresh")]
+        [ProducesResponseType(typeof(TokenResponse), 200)]
+        public async Task<ActionResult<TokenResponse>> RefreshTokenAsync([FromBody] RefreshTokenRequest request)
+        {
+            return await Mediator.Send(request);
+        }
     }
 }
 

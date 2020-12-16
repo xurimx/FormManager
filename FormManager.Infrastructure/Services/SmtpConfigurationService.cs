@@ -1,4 +1,5 @@
-﻿using FormManager.Application.Common.Interfaces;
+﻿using FormManager.Application.Common.Exceptions;
+using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace FormManager.Infrastructure.Services
             }
             catch (Exception e)
             {
-                throw new Exception("Smtp configuration was not initialized! Please set the configuration first.");
+                throw new FormMgrException("Smtp configuration was not initialized! Please set the configuration first.", 400);
             }
         }
 

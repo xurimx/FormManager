@@ -16,7 +16,6 @@ namespace FormManager.Application.Users.Commands
         public string Username { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        [JsonIgnore]
         public string Password { get; set; }
     }
 
@@ -33,7 +32,7 @@ namespace FormManager.Application.Users.Commands
             User user = await repository.FindByUsernameAsync(request.Username);
             if (user != null)
             {
-                throw new UserExistsException($"A User with {request.Username} already exists");
+                throw new AuthenticateException($"A User with {request.Username} already exists");
             }
             user = await repository.CreateUserAsync(request.Username, request.Email, request.Password, request.Role);
 

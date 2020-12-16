@@ -9,6 +9,7 @@ using FormManager.Application.Forms.Queries;
 using FormManager.Domain.Entities;
 using FormManager.Application.Forms.Commands;
 using FormManager.Application.Common.Models;
+using FormManager.Api.Responses;
 
 namespace FormManager.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace FormManager.Api.Controllers
     {
         [HttpGet]
         [Authorize(Roles ="admin")]
+        [ProducesResponseType(typeof(Pagination<Form>), 200)]
         public async Task<ActionResult<Pagination<Form>>> GetForms([FromQuery]GetFormsQuery query)
         {
             return await Mediator.Send(query);
@@ -24,12 +26,14 @@ namespace FormManager.Api.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
+        [ProducesResponseType(typeof(Form), 200)]
         public async Task<ActionResult<Form>> GetForm(Guid id)
         {
             return await Mediator.Send(new GetFormByIdQuery(id));
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateFormCommand), 201)]
         public async Task<IActionResult> PostForm([FromBody]CreateFormCommand form)
         {
             Guid guid = await Mediator.Send(form);
@@ -38,6 +42,8 @@ namespace FormManager.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> DeleteForm(Guid id)
         {
             bool deleted = await Mediator.Send(new DeleteFormCommand(id));

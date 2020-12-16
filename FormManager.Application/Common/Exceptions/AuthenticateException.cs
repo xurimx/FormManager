@@ -5,24 +5,24 @@ using System.Text;
 
 namespace FormManager.Application.Common.Exceptions
 {
-    public class NotFoundException : Exception, IBaseException
+    public class AuthenticateException : Exception, IBaseException
     {
-        public NotFoundException() : base() {}
+        public AuthenticateException() : base() { }
 
-        public NotFoundException(string message, int status, List<Error> errors) : base(message)
+        public AuthenticateException(string message, int status, List<Error> errors) : base(message)
         {
             this.Status = status;
             this.Errors = errors;
         }
 
-        public NotFoundException(string message, int status) : base(message)
+        public AuthenticateException(string message, int status) : base(message)
         {
             this.Status = status;
         }
 
-        public NotFoundException(string message) : base(message) { }
+        public AuthenticateException(string message) : base(message) { }
 
-        public NotFoundException(string message, Exception innerException)
+        public AuthenticateException(string message, Exception innerException)
             : base(message, innerException) { }
 
         public List<Error> Errors { get; set; } = new List<Error>();

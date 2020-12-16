@@ -1,4 +1,5 @@
-﻿using FormManager.Application.Common.Interfaces;
+﻿using FormManager.Application.Common.Exceptions;
+using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
 using FormManager.Domain.Entities;
 using System;
@@ -42,8 +43,15 @@ namespace FormManager.Infrastructure.Services
             html += $"<p>Company: {from.Company}</p></br>";
             html += $"<p>Appointment: {from.Appointment}</p></br>";
             mailMessage.Body = html;
+            try
+            {
+                smtpClient.Send(mailMessage);
+            }
+            catch (Exception e)
+            {
+                throw new FormMgrException("An error has occured while sending the mail", 400);
+            }
 
-            smtpClient.Send(mailMessage);
         }
     }
 }

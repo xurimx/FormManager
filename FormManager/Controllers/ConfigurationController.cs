@@ -1,4 +1,5 @@
-﻿using FormManager.Application.Config.Commands;
+﻿using FormManager.Api.Responses;
+using FormManager.Application.Config.Commands;
 using FormManager.Application.Config.Queries;
 using FormManager.Application.Config.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,7 @@ namespace FormManager.Api.Controllers
     public class ConfigurationController : BaseApiController
     {
         [HttpPost]
+        [ProducesResponseType(200)]
         public async Task<ActionResult> SetConfigurationAsync(UpdateConfigurationCommand command)
         {
             await Mediator.Send(command);
@@ -23,6 +25,7 @@ namespace FormManager.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(SmtpConfiguration),200)]
         public async Task<ActionResult<SmtpConfiguration>> GetConfigurationAsync()
         {
             return await Mediator.Send(new GetSmtpConfigurationQuery());
