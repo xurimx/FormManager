@@ -1,5 +1,7 @@
 <template>
     <h1>Fill form</h1>
+    <button type="button" @click="logout">Logout</button>
+
 
 
     <input type="text" placeholder="Name" v-model="name"/>
@@ -17,7 +19,7 @@
 <script>
 
     import axios from '../utils/api';
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapMutations} from 'vuex';
 
     export default {
         name: "Form",
@@ -49,7 +51,14 @@
                 }catch (e) {
                     this.error = e.response.data.Description;
                 }
-            }
+            },
+
+            ...mapMutations(['resetState']),
+
+            logout: function () {
+                this.resetState();
+                this.$router.push('/');
+            },
         },
         computed: {...mapGetters(['token'])},
     }

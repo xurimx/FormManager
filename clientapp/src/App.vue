@@ -2,18 +2,20 @@
     <div :class="{'loading': !this.ready}">
         <router-view/>
     </div>
-    <toast></toast>
+
+    <loader v-if="!this.ready"></loader>
+
 </template>
 
 
 <script>
 
     import {mapActions, mapGetters} from 'vuex';
-    import Toast from "./components/Toast";
+    import Loader from "./components/Loader";
+
 
     export default {
-        components: {Toast},
-
+        components: {Loader},
         beforeCreate() {
             this.$store.commit('initialiseStore');
         },
