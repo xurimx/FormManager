@@ -2,9 +2,10 @@
 using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
 using FormManager.Domain.Entities;
+using FormManager.Infrastructure.Helpers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -63,6 +64,13 @@ namespace FormManager.Infrastructure.Services
                     context.Configs.Update(config);
                 }
             }
+
+            bool connected = SmtpHelper.TestConnection(configuration.Host, int.Parse(configuration.Port));
+            if (!connected)
+            {
+                throw new FormMgrException("Smtp connection failed. Please enter a valid configuration.");
+            }
+
             await context.SaveChangesAsync();
         }
     }

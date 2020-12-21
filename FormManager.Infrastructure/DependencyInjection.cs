@@ -20,7 +20,8 @@ namespace FormManager.Infrastructure
             services.AddDbContext<AppDbContext>(options =>
             {
                 //options.UseInMemoryDatabase("dev");
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
                 //options.UseMySql(configuration.GetConnectionString("MysqlConnection"),
                 //new MariaDbServerVersion(new Version(10, 4)),
                 //        mySqlOptions => mySqlOptions
