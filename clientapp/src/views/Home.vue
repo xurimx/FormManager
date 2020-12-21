@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from 'vuex';
+    import {mapActions, mapGetters, mapMutations} from 'vuex';
 
     export default {
         name: 'Home',
@@ -24,8 +24,10 @@
         components: {},
         methods: {
             ...mapActions(['authenticate', 'userinfo', 'resetState']),
+            ...mapMutations(['setReady']),
             login: async function () {
                 try {
+                    this.setReady(false);
                     await this.authenticate({
                         'username': this.username,
                         'password': this.password
@@ -33,14 +35,16 @@
 
                     await this.userinfo();
                     if (this.role === 'admin') {
-                        this.$router.push('Admin');
+                        this.$router.push('admin');
                     } else {
-                        this.$router.push('Form');
+                        this.$router.push('form');
                     }
+                    this.setReady(true);
 
                 }catch (e) {
                     this.password = '';
                     this.error = e.response.data.Description;
+                    this.setReady(true);
                 }
             },
             logout: function(){

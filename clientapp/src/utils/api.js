@@ -19,7 +19,7 @@ api.interceptors.response.use(response => response, error => {
    if (status === 401) {
       console.log('unauthorized');
       if (store.state.refreshToken){
-         axios.post(baseUrl+'account/refreshToken', {
+         axios.post(baseUrl+'account/refresh', {
             token: store.state.token,
             refreshToken: store.state.refreshToken
          }).then(value => {

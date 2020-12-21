@@ -74,7 +74,8 @@ const store = createStore({
             }
         },
         resetState: state => {
-            Object.assign(state, initState)
+            state.token = null;
+            state.refreshToken = null;
         }
     }
 });
