@@ -1,57 +1,56 @@
-﻿using FormManager.Application.Common.Exceptions;
+﻿using FluentEmail.Core;
+using FluentEmail.Core.Models;
+using FluentEmail.Smtp;
 using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
 using FormManager.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using RazorLight;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FormManager.Infrastructure.Services
 {
     public class EmailSender : IEmailSender
     {
+        private const string Template = "EmailTemplate.cshtml";
         private readonly IUserRepository repository;
-        private readonly ISmtpClientFactory smtpFactory;
         private readonly ISmtpConfigurationService service;
+        private readonly RazorLightEngine _razorLightEngine;
 
         public EmailSender(IUserRepository repository, 
-                           ISmtpClientFactory smtpFactory,
                            ISmtpConfigurationService service)
         {
             this.repository = repository;
-            this.smtpFactory = smtpFactory;
             this.service = service;
+            _razorLightEngine = new RazorLightEngineBuilder()
+                                .UseEmbeddedResourcesProject(typeof(DependencyInjection))
+                                .UseMemoryCachingProvider()
+                                .Build();
+
         }
         public async Task SendEmail(Form from)
         {
-            SmtpClient smtpClient = await smtpFactory.CreateClient();
+            string html = await _razorLightEngine.CompileRenderAsync<object>(Template, from);
+            User user = await repository.GetUserById(from.SenderId);
             SmtpConfiguration configuration = await service.GetConfiguration();
 
-            User user = await repository.GetUserById(from.SenderId);
-            MailMessage mailMessage = new MailMessage(configuration.From, configuration.To);
-            mailMessage.Subject = $"New message from: {user.Username}";
-            mailMessage.IsBodyHtml = true;
+            Email.DefaultSender = new SmtpSender(new SmtpClient { 
+                Host = configuration.Host,
+                Port = int.Parse(configuration.Port),
+                Credentials = new NetworkCredential(configuration.Username, configuration.Password)
+            });
+            SendResponse sendResponse = await Email
+                .From(configuration.From)
+                .To(configuration.To)                
+                .Subject($"New Message from: {user.Username}")
+                .Body(html, true)               
+                .SendAsync();
 
-            string html = "";
-            html += $"<h5>Name: {from.Name}</h5></br>";
-            html += $"<p>Email: {from.Email}</p></br>";
-            html += $"<p>Telephone: {from.Telephone}</p></br>";
-            html += $"<p>Company: {from.Company}</p></br>";
-            html += $"<p>Appointment: {from.Appointment}</p></br>";
-            mailMessage.Body = html;
-            try
+            if (!sendResponse.Successful)
             {
-                smtpClient.Send(mailMessage);
+                //Todo log
             }
-            catch (Exception e)
-            {
-                throw new FormMgrException("An error has occured while sending the mail", 400);
-            }
-
         }
     }
 }

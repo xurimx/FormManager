@@ -7,7 +7,7 @@ using System.Text;
 namespace FormManager.Application.Users.Validators
 {
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
-    {
+    {      
         public CreateUserCommandValidator()
         {
             RuleFor(x => x.Email).EmailAddress();

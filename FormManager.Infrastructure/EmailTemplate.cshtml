@@ -1,0 +1,15 @@
+﻿@model FormManager.Domain.Entities.Form
+<div class="data">
+    <h4>From: @Model.Email</h4>
+    <p>Name: @Model.Name</p>
+    <p>Company: @Model.Company</p>
+    <p>Telephone: @Model.Telephone</p>
+    <p>SenderId: @Model.SenderId</p>
+    <p>Appointment: @Model.Appointment</p>
+</div>
+<style>
+    .data{
+        display: flex;
+        flex-direction: column
+    }
+</style>

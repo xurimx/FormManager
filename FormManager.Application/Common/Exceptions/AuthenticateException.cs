@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FormManager.Application.Common.Exceptions
 {
-    public class AuthenticateException : Exception, IBaseException
+    public class AuthenticateException : Exception
     {
         public AuthenticateException() : base() { }
 

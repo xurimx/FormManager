@@ -24,10 +24,10 @@
         components: {},
         methods: {
             ...mapActions(['authenticate', 'userinfo', 'resetState']),
-            ...mapMutations(['setReady']),
+            ...mapMutations(['setLoading']),
             login: async function () {
                 try {
-                    this.setReady(false);
+                    this.setLoading(true);
                     await this.authenticate({
                         'username': this.username,
                         'password': this.password
@@ -39,12 +39,12 @@
                     } else {
                         this.$router.push('form');
                     }
-                    this.setReady(true);
+                    this.setLoading(false);
 
                 }catch (e) {
                     this.password = '';
                     this.error = e.response.data.Description;
-                    this.setReady(true);
+                    this.setLoading(false);
                 }
             },
             logout: function(){

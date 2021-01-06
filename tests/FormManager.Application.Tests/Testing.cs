@@ -1,6 +1,7 @@
 ﻿using FormManager.Api;
 using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Config.ViewModels;
+using FormManager.Domain.Entities;
 using FormManager.Infrastructure.Data;
 using FormManager.Infrastructure.Models;
 using MediatR;
@@ -51,6 +52,13 @@ namespace FormManager.Application.IntegrationTests
                     d.ServiceType == typeof(ICurrentUserService));
             services.Remove(currentUserService);
 
+            var emailSender = services.FirstOrDefault(s => s.ServiceType == typeof(IEmailSender));
+            services.Remove(emailSender);
+
+            Mock<IEmailSender> mock = new Mock<IEmailSender>();
+            mock.Setup(x => (x.SendEmail(It.IsAny<Form>()))).Returns(Task.CompletedTask);
+            services.AddTransient(provider => mock.Object);
+
             services.AddTransient(provider =>
                 Mock.Of<ICurrentUserService>(s => s.UserId == _currentUserId));
 
@@ -76,21 +84,6 @@ namespace FormManager.Application.IntegrationTests
         public static async Task ResetState()
         {
             await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
-        }
-
-        public static async Task SetupSmtp()
-        {
-            using var scope = _scopeFactory.CreateScope();
-            var smtpConfig = scope.ServiceProvider.GetRequiredService<ISmtpConfigurationService>();
-            await smtpConfig.UpdateConfiguration(new SmtpConfiguration
-            {
-                Host = "smtp-relay.sendinblue.com",
-                Port = "587",
-                From = "xurimx@gmail.com",
-                To = "umorinax@gmail.com",
-                Username = "xurimx@gmail.com",
-                Password = "VXI0PgYhjF2QtE5p"
-            });
         }
 
         public static async Task AddAsync<TEntity>(TEntity entity) where TEntity : class

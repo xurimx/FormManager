@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '../store/index';
-let baseUrl = 'https://formmanager.azurewebsites.net/api/';
+let baseUrl = 'https://localhost:5001/api/';
 
 let api =  axios.create({
    baseURL: baseUrl
@@ -14,23 +14,23 @@ api.interceptors.request.use(function (config) {
    return config;
 });
 
-api.interceptors.response.use(response => response, error => {
+api.interceptors.response.use(response => response, async error => {
    const status = error.response.status;
    if (status === 401) {
-      console.log('unauthorized');
-      if (store.state.refreshToken){
-         axios.post(baseUrl+'account/refresh', {
+      if (store.state.refreshToken) {
+         let value = await api.post('account/refresh', {
             token: store.state.token,
             refreshToken: store.state.refreshToken
-         }).then(value => {
-            store.commit('setToken', {token: value.data.token});
-            store.commit('setRefreshToken', {refreshToken: value.data.refreshToken});
-            error.config.headers.Authorization = `Bearer ${value.data.token}`;
-            return axios.request(error.config);
          });
+         store.commit('setToken', {token: value.data.token});
+         store.commit('setRefreshToken', {refreshToken: value.data.refreshToken});
+         error.config.headers.Authorization = `Bearer ${value.data.token}`;
+         return await axios.request(error.config);
+      } else {
+         console.log('rejected call');
+         return Promise.reject(error);
       }
    }
-   return Promise.reject(error);
 });
 
 export default api;

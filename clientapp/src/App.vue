@@ -2,9 +2,7 @@
     <div :class="{'loading': !this.ready}">
         <router-view/>
     </div>
-
-    <loader v-if="!this.ready"></loader>
-
+    <loader v-if="this.loading"></loader>
 </template>
 
 
@@ -23,14 +21,14 @@
         async mounted() {
             await this.$store.dispatch('userinfo');
             if (this.role === 'admin') {
-                this.$router.push('admin');
+                await this.$router.push('admin');
             }
             if(this.role === 'user'){
-                this.$router.push('form');
+                await this.$router.push('form');
             }
         },
 
-        computed: {...mapGetters(['role', 'ready'])},
+        computed: {...mapGetters(['role', 'ready', 'loading'])},
         methods: {
             ...mapActions(['userinfo']),
         }

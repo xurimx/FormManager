@@ -1,6 +1,10 @@
 <template>
     admin layout
-    <button type="button" @click="logout">Logout</button>
+    <ul>
+        <li><router-link active-class="active" to="/admin/forms">Forms</router-link></li>
+        <li><router-link active-class="active" to="/admin/users">Users</router-link></li>
+        <button type="button" @click="logout">Logout</button>
+    </ul>
     <router-view></router-view>
 </template>
 
@@ -12,12 +16,10 @@
 
         methods: {
             ...mapMutations(['resetState']),
-
             logout: function () {
               this.resetState();
               this.$router.push('/');
             },
-
         },
     }
 </script>

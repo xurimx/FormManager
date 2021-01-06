@@ -13,6 +13,5 @@ namespace FormManager.Application.Common.Interfaces
         DbSet<Domain.Entities.Config> Configs { get; set; }
         DbSet<RefreshToken> RefreshTokens { get; set; }
         Task<int> SaveChangesAsync();
-
     }
 }

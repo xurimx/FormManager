@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FormManager.Application.Common.Exceptions
 {
-    public class FormMgrException : Exception, IBaseException
+    public class FormMgrException : Exception
     {
         public FormMgrException() : base() { }
 

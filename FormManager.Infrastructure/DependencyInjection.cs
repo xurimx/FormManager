@@ -19,13 +19,8 @@ namespace FormManager.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                //options.UseInMemoryDatabase("dev");
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
                                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
-                //options.UseMySql(configuration.GetConnectionString("MysqlConnection"),
-                //new MariaDbServerVersion(new Version(10, 4)),
-                //        mySqlOptions => mySqlOptions
-                //            .CharSetBehavior(CharSetBehavior.NeverAppend));
 
             });
 
@@ -41,13 +36,14 @@ namespace FormManager.Infrastructure
                     {
                         ValidIssuer = configuration["Tokens:Issuer"],
                         ValidAudience = configuration["Tokens:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Tokens:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Tokens:Key"])),
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ISmtpConfigurationService, SmtpConfigurationService>();
-            services.AddTransient<ISmtpClientFactory, SmtpClientFactory>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
 

@@ -33,7 +33,7 @@ namespace FormManager.Application.Forms.Commands
             Form form = context.Forms.FirstOrDefault(x => x.Id == request.Id);
             if (form == null)
             {
-                throw new NotFoundException($"Form with {request.Id} was not found");
+                throw new FormMgrException($"Form with {request.Id} was not found");
             }
             context.Forms.Remove(form);
             await context.SaveChangesAsync();

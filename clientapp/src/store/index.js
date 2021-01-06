@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import users from './users.js';
+import forms from './forms.js';
 import axios from '../utils/api';
 // import router from '../router/index'
 
@@ -9,11 +10,12 @@ const initState = () => ({
     refreshToken: null,
     role: '',
     active: false,
+    loading: false,
     ready: false,
 });
 
 const store = createStore({
-    modules: {users},
+    modules: {users, forms},
     state: initState,
     actions: {
         authenticate: async ({commit}, {username, password}) => {
@@ -23,15 +25,16 @@ const store = createStore({
         },
         userinfo: async ({commit, state}) => {
             try {
-                let response = await axios.get('account/userinfo', {
-                    headers: {
-                        'Authorization': 'Bearer ' + state.token,
-                    },
-                });
-                let role = response.data.roles[0];
-                commit('setRole', {role: role});
-                commit('setReady', true);
-            } catch (e) {
+                if (state.token) {
+                    let response = await axios.get('account/userinfo', {
+                        headers: {
+                            'Authorization': 'Bearer ' + state.token,
+                        },
+                    });
+                    let role = response.data.roles[0];
+                    commit('setRole', {role: role});
+                }
+            } finally {
                 commit('setReady', true);
             }
         },
@@ -48,14 +51,17 @@ const store = createStore({
         },
         ready: state => {
             return state.ready;
+        },
+        loading: state => {
+            return state.loading;
         }
     },
     mutations: {
         setToken: (state, {token}) => {
             state.token = token;
         },
-        setRefreshToken: (state, {refreshToken}) =>{
-            state.refreshToken= refreshToken
+        setRefreshToken: (state, {refreshToken}) => {
+            state.refreshToken = refreshToken
         },
         setRole: (state, {role}) => {
             state.role = role;
@@ -63,13 +69,16 @@ const store = createStore({
         setReady: (state, payload) => {
             state.ready = payload;
         },
+        setLoading: (state, payload) => {
+            state.loading = payload;
+        },
         initialiseStore: (state) => {
             let token = localStorage.getItem('token');
             let refresh = localStorage.getItem('refreshToken');
             if (token != null) {
                 state.token = token;
             }
-            if (refresh != null){
+            if (refresh != null) {
                 state.refreshToken = refresh;
             }
         },
@@ -82,9 +91,6 @@ const store = createStore({
 
 store.subscribe((mutation, state) => {
     localStorage.setItem('token', state.token);
-});
-
-store.subscribe((mutation, state) => {
     localStorage.setItem('refreshToken', state.refreshToken);
 });
 

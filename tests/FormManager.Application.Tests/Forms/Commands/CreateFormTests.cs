@@ -29,9 +29,8 @@ namespace FormManager.Application.IntegrationTests.Forms.Commands
 
         [Test]
         public async Task ShouldRequireFutureDateAsync()
-        {
+        {            
             var userId = await RunAsDefaultUserAsync();
-            await SetupSmtp();
 
             var command = new CreateFormCommand
             {
@@ -63,9 +62,32 @@ namespace FormManager.Application.IntegrationTests.Forms.Commands
         }
 
         [Test]
-        public void ShouldRequireValidPhoneNumber()
+        [TestCase("+38349123456")]
+        //[TestCase("asd", ExpectedResult = typeof(ValidationException))]
+        public async Task ShouldRequireValidPhoneNumberAsync(string number)
         {
+            var userId = await RunAsDefaultUserAsync();
+            var command = new CreateFormCommand
+            {
+                Name = "Urim",
+                Company = "Google",
+                Email = "urim@morina.com",
+                Telephone = number,
+                Appointment = DateTime.UtcNow.AddDays(1),
+            };
 
+            var id = await SendAsync(command);
+            id.Should<Guid>();
+            id.Should().NotBe(Guid.Empty);
+
+            Form form = await FindAsync<Form>(id);
+
+            form.Should().NotBeNull();
+            form.Name.Should().Be(command.Name);
+            form.Telephone.Should().Be(command.Telephone);
+            form.Appointment.Should().Be(command.Appointment);
+            form.Email.Should().Be(command.Email);
+            form.Date.Should().BeCloseTo(DateTime.Now, 10000);
         }
     }
 }

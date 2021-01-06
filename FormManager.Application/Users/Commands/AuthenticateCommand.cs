@@ -31,14 +31,14 @@ namespace FormManager.Application.Users.Commands
             User user = await repository.FindByUsernameAsync(request.Username);
             if (user == null)
             {
-                throw new NotFoundException("Username or password is incorrect.");
+                throw new FormMgrException("Username or password is incorrect.");
             }
 
             bool result = await authentication.CheckPassword(request.Username, request.Password);
 
             if (result == false)
             {
-                throw new NotFoundException("Username or password is incorrect.");
+                throw new FormMgrException("Username or password is incorrect.");
             }
             return await authentication.CreateToken(user);
         }

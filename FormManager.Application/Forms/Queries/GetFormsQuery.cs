@@ -72,6 +72,7 @@ namespace FormManager.Application.Forms.Queries
 
                 query = query.Provider.CreateQuery<Form>(orderBy);                
             }
+            
             int filtered = query.Count();
             List<Form> items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
 

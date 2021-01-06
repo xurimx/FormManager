@@ -166,7 +166,7 @@ namespace FormManager.Infrastructure.Services
                 config["Tokens:Issuer"],
                 config["Tokens:Audience"],
                 claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: credentials);
             return token;
         }
