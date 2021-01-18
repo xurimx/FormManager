@@ -1,0 +1,2 @@
+# FormManager
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/63e8b1ff6c314233afd496048df8914a)](https://app.codacy.com/gh/xurimx/FormManager?utm_source=github.com&utm_medium=referral&utm_content=xurimx/FormManager&utm_campaign=Badge_Grade)
