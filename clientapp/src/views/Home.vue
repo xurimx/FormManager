@@ -5,7 +5,6 @@
         <input type="submit" value="Submit" @click="login">
         <span v-if="error">{{error}}</span>
     </div>
-
 </template>
 
 <script>
@@ -20,9 +19,8 @@
                 error: null
             }
         },
-        computed: {...mapGetters(['token', 'role'])},
-        components: {},
-        methods: {
+      computed: {...mapGetters(['token', 'role'])},
+      methods: {
             ...mapActions(['authenticate', 'userinfo', 'resetState']),
             ...mapMutations(['setLoading']),
             login: async function () {
@@ -35,9 +33,9 @@
 
                     await this.userinfo();
                     if (this.role === 'admin') {
-                        this.$router.push('admin');
+                        await this.$router.push('admin');
                     } else {
-                        this.$router.push('form');
+                        await this.$router.push('form');
                     }
                     this.setLoading(false);
 
@@ -52,5 +50,14 @@
                 this.$router.push('/');
             }
         },
+      async mounted() {
+        setTimeout(async () => {
+          switch (this.role){
+            case 'admin': await this.$router.push({path: '/admin'}); break;
+            case 'user': await this.$router.push({path: '/form'}); break;
+            default: break;
+          }
+        }, 100)
+      }
     }
 </script>

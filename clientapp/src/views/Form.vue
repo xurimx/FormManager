@@ -3,7 +3,6 @@
     <button type="button" @click="logout">Logout</button>
 
 
-
     <input type="text" placeholder="Name" v-model="name"/>
     <input type="email" placeholder="Email" v-model="email"/>
     <input type="tel" placeholder="Tel" v-model="tel"/>
@@ -12,56 +11,51 @@
 
 
     <input type="submit" @click="dataPost">
-    <span v-if="error">{{error}}</span>
+    <span v-if="error">{{ error }}</span>
 
 </template>
 
 <script>
 
-    import axios from '../utils/api';
-    import {mapGetters, mapMutations} from 'vuex';
+import axios from '../utils/api';
+import {mapGetters, mapMutations} from 'vuex';
 
-    export default {
-        name: "Form",
-        data() {
-            return {
-                name: '',
-                email: '',
-                tel: '',
-                company: '',
-                appointment: '',
-                error: ''
-            }
+const initData = () => ({
+    name: '',
+    email: '',
+    tel: '',
+    company: '',
+    appointment: '',
+    error: ''
+});
+export default {
+    name: "Form",
+    data: initData,
+    methods: {
+        dataPost: function() {
+            axios.post('Forms', {
+                name: this.name,
+                email: this.email,
+                telephone: this.tel,
+                company: this.company,
+                appointment: this.appointment,
+            }).then(() => {
+                this.resetForm();
+            }).catch(reason => {
+                this.error = reason.response.data.Description;
+            });
         },
-        methods: {
-            dataPost: async function () {
-                try {
-                    await axios.post('Forms', {
-                        name: this.name,
-                        email: this.email,
-                        telephone: this.tel,
-                        company: this.company,
-                        appointment: this.appointment,
-                    });
-                    this.name = '';
-                    this.email = '';
-                    this.tel = '';
-                    this.company = '';
-                    this.appointment = '';
-                }catch (e) {
-                    this.error = e.response.data.Description;
-                }
-            },
-
-            ...mapMutations(['resetState']),
-
-            logout: function () {
-                this.resetState();
-                this.$router.push('/');
-            },
+        ...mapMutations(['resetState']),
+        logout: function () {
+            this.resetState();
+            this.$router.push('/');
         },
-        computed: {...mapGetters(['token'])},
-    }
+        resetForm: function () {
+            Object.assign(this.$data, initData());
+        }
+    },
+    computed: {...mapGetters(['token'])},
+}
 </script>
 
 <style scoped>

@@ -11,21 +11,20 @@
     import {mapActions, mapGetters} from 'vuex';
     import Loader from "./components/Loader";
 
-
     export default {
         components: {Loader},
         beforeCreate() {
             this.$store.commit('initialiseStore');
         },
 
-        async mounted() {
+        async created() {
+          let initPath = window.location.pathname;
+          try {
             await this.$store.dispatch('userinfo');
-            if (this.role === 'admin') {
-                await this.$router.push('admin');
-            }
-            if(this.role === 'user'){
-                await this.$router.push('form');
-            }
+            await this.$router.push({path: initPath});
+          }catch (e) {
+            await this.$router.push({name:'Home'});
+          }
         },
 
         computed: {...mapGetters(['role', 'ready', 'loading'])},

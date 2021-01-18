@@ -2,6 +2,10 @@
 node_modules
 /dist
 
+.logs/
+.tye/
+.elogs/
+
 
 # local env files
 .env.local

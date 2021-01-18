@@ -8,7 +8,6 @@ import Form from "../views/Form";
 import NotFound from "../views/NotFound";
 import store from "../store/index";
 
-
 const routes = [
     {path: '/', name: 'Home', component: Home},
     {path: '/form', name: 'Form', component: Form, meta: { authorize: 'user' }},
@@ -33,24 +32,18 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    // redirect to login page if not logged in and trying to access a restricted page
     const { authorize } = to.meta;
     const token = store.state.token;
     const role = store.state.role;
 
     if (authorize) {
         if (!token) {
-            // not logged in so redirect to login page with the return url
             return next({ path: '/', query: { returnUrl: to.path } });
         }
-
-        // check if route is restricted by role
         if (authorize !== role) {
-            // role not authorised so redirect to home page
             return next({ path: '/' });
         }
     }
-
     next();
 });
 
