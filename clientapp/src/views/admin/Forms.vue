@@ -1,6 +1,8 @@
 <template>
-    <h1>Admin Dashboard Submited Forms</h1>
+  <div class="forms">
+
     <filled-forms></filled-forms>
+  </div>
 </template>
 
 <script>

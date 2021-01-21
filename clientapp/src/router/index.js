@@ -7,6 +7,7 @@ import Forms from "../views/admin/Forms";
 import Form from "../views/Form";
 import NotFound from "../views/NotFound";
 import store from "../store/index";
+import Smtp from "@/views/admin/Smtp";
 
 const routes = [
     {path: '/', name: 'Home', component: Home},
@@ -17,6 +18,7 @@ const routes = [
             {path: '', name: 'Dashboard', component: Dashboard},
             {path: 'users', name: 'Users', component: Users},
             {path: 'forms', name: 'Forms', component: Forms},
+            {path: 'smtp', name: 'SMTP', component: Smtp},
             {path: '/*', component: NotFound},
         ]
     },

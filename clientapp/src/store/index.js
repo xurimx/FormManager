@@ -12,6 +12,7 @@ const initState = () => ({
     active: false,
     loading: false,
     ready: false,
+    user: null
 });
 
 const store = createStore({
@@ -33,6 +34,7 @@ const store = createStore({
                     });
                     let role = response.data.roles[0];
                     commit('setRole', {role: role});
+                    commit('setUser', {user: response.data})
                 }
             } finally {
                 commit('setReady', true);
@@ -54,6 +56,9 @@ const store = createStore({
         },
         loading: state => {
             return state.loading;
+        },
+        user: state => {
+            return state.user;
         }
     },
     mutations: {
@@ -85,6 +90,9 @@ const store = createStore({
         resetState: state => {
             state.token = null;
             state.refreshToken = null;
+        },
+        setUser: (state, {user}) =>{
+            state.user = user;
         }
     }
 });
