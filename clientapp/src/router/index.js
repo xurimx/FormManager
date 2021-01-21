@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import Admin from '../layouts/admin';
-import Dashboard from "../views/admin/Dashboard";
 import Users from "../views/admin/Users";
 import Forms from "../views/admin/Forms";
 import Form from "../views/Form";
@@ -15,7 +14,7 @@ const routes = [
 
     {path: '/admin', name: 'Admin',component: Admin, meta: { authorize: 'admin' },
         children: [
-            {path: '', name: 'Dashboard', component: Dashboard},
+            {path: '', name: 'Dashboard', component: Forms},
             {path: 'users', name: 'Users', component: Users},
             {path: 'forms', name: 'Forms', component: Forms},
             {path: 'smtp', name: 'SMTP', component: Smtp},

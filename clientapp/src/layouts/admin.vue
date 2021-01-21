@@ -166,6 +166,10 @@ export default {
       margin-top: 30px;
       opacity: 0.6;
       transition: all 0.5s;
+      &.active{
+        opacity: 1;
+      }
+
 
       svg {
         fill: #000;
