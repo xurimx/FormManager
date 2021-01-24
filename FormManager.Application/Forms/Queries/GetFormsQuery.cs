@@ -1,5 +1,7 @@
-﻿using FormManager.Application.Common.Interfaces;
+﻿using AutoMapper;
+using FormManager.Application.Common.Interfaces;
 using FormManager.Application.Common.Models;
+using FormManager.Application.Forms.Mappings.ViewModels;
 using FormManager.Domain.Entities;
 using LinqKit;
 using MediatR;
@@ -16,22 +18,26 @@ using System.Threading.Tasks;
 
 namespace FormManager.Application.Forms.Queries
 {
-    public class GetFormsQuery : RequestQuery<Pagination<Form>> {}
+    public class GetFormsQuery : RequestQuery<Pagination<FormVM>> {}
 
-    public class GetFormsQueryHandler : IRequestHandler<GetFormsQuery, Pagination<Form>>
+    public class GetFormsQueryHandler : IRequestHandler<GetFormsQuery, Pagination<FormVM>>
     {
         private readonly IAppDbContext context;
+        private readonly IMapper mapper;
+        private readonly IUserRepository userRepository;
 
-        public GetFormsQueryHandler(IAppDbContext context)
+        public GetFormsQueryHandler(IAppDbContext context, IMapper mapper, IUserRepository userRepository)
         {
             this.context = context;
+            this.mapper = mapper;
+            this.userRepository = userRepository;
         }
 
-        async Task<Pagination<Form>> IRequestHandler<GetFormsQuery, Pagination<Form>>.Handle(GetFormsQuery request, CancellationToken cancellationToken)
+        async Task<Pagination<FormVM>> IRequestHandler<GetFormsQuery, Pagination<FormVM>>.Handle(GetFormsQuery request, CancellationToken cancellationToken)
         {
             int page = request.Page ?? 1;
             int limit = request.Limit ?? 10;
-            int total = await context.Forms.CountAsync();
+            int total = await context.Forms.CountAsync(cancellationToken);
             
             var query = context.Forms.AsQueryable();
             if (!string.IsNullOrEmpty(request.SearchInput))
@@ -74,13 +80,16 @@ namespace FormManager.Application.Forms.Queries
             }
             
             int filtered = query.Count();
-            List<Form> items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
-
-            Pagination<Form> pagination = new Pagination<Form> {
-                TotalItems = await context.Forms.CountAsync(),
+            List<Form> items = await query.Skip((page - 1) * limit).Take(limit).ToListAsync(cancellationToken);
+            List<FormVM> listsVM = mapper.Map<List<FormVM>>(items);
+            foreach (var item in listsVM)
+                item.Sender.Username = (await userRepository.GetUserById(item.Sender.Id))?.Username;
+            
+            Pagination<FormVM> pagination = new Pagination<FormVM> {
+                TotalItems = total,
                 FilteredItems = filtered,
                 Page = page,
-                Items = items,
+                Items = listsVM,
                 TotalPages = (int)Math.Ceiling((double)filtered / limit)
             };
             pagination.BuildNavigation(request);

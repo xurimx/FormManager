@@ -10,6 +10,7 @@ using FormManager.Domain.Entities;
 using FormManager.Application.Forms.Commands;
 using FormManager.Application.Common.Models;
 using FormManager.Api.Responses;
+using FormManager.Application.Forms.Mappings.ViewModels;
 
 namespace FormManager.Api.Controllers
 {
@@ -18,16 +19,16 @@ namespace FormManager.Api.Controllers
     {
         [HttpGet]
         [Authorize(Roles ="admin")]
-        [ProducesResponseType(typeof(Pagination<Form>), 200)]
-        public async Task<ActionResult<Pagination<Form>>> GetForms([FromQuery]GetFormsQuery query)
+        [ProducesResponseType(typeof(Pagination<FormVM>), 200)]
+        public async Task<ActionResult<Pagination<FormVM>>> GetForms([FromQuery]GetFormsQuery query)
         {
             return await Mediator.Send(query);
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
-        [ProducesResponseType(typeof(Form), 200)]
-        public async Task<ActionResult<Form>> GetForm(Guid id)
+        [ProducesResponseType(typeof(FormVM), 200)]
+        public async Task<ActionResult<FormVM>> GetForm(Guid id)
         {
             return await Mediator.Send(new GetFormByIdQuery(id));
         }

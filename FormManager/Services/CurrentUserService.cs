@@ -16,7 +16,7 @@ namespace FormManager.Api.Services
         {
             this.httpContext = httpContext;
         }
-        public string UserId => httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        public string UserId => httpContext.HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         public IDictionary<string, string[]> Claims => throw new NotImplementedException();
     }

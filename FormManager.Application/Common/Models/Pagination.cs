@@ -19,7 +19,7 @@ namespace FormManager.Application.Common.Models
 
         public void BuildNavigation(IRequestQuery request)
         {
-            var queryParams = new Dictionary<string, string>()
+            var queryParams = new Dictionary<string, string>
             {
                 {"SearchInput", request.SearchInput },
                 {"OrderBy", request.OrderBy },

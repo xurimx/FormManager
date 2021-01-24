@@ -7,16 +7,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["FormManager/FormManager.csproj", "FormManager/"]
-RUN dotnet restore "FormManager/FormManager.csproj"
+COPY ["FormManager/FormManager.Api.csproj", "FormManager/"]
+COPY ["FormManager.Infrastructure/FormManager.Infrastructure.csproj", "FormManager.Infrastructure/"]
+COPY ["FormManager.Application/FormManager.Application.csproj", "FormManager.Application/"]
+COPY ["FormManager.Domain/FormManager.Domain.csproj", "FormManager.Domain/"]
+RUN dotnet restore "FormManager/FormManager.Api.csproj"
 COPY . .
 WORKDIR "/src/FormManager"
-RUN dotnet build "FormManager.csproj" -c Release -o /app/build
+RUN dotnet build "FormManager.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FormManager.csproj" -c Release -o /app/publish
+RUN dotnet publish "FormManager.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FormManager.dll"]
+ENTRYPOINT ["dotnet", "FormManager.Api.dll"]

@@ -7,8 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,6 +21,15 @@ namespace FormManager.Api
     {
         public static void Main(string[] args)
         {
+            //Log.Logger = new LoggerConfiguration()
+            //    .MinimumLevel.Debug()
+            //    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            //    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            //    .Enrich.FromLogContext()
+            //    .WriteTo.Console()
+            //    .CreateLogger();
+
+
             var host = CreateHostBuilder(args).Build();
             CreateDefaultAccountAsync(host).Wait();
             host.Run();
@@ -65,7 +77,19 @@ namespace FormManager.Api
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .CaptureStartupErrors(true)
+                        .UseSerilog((hostingContext, loggerConfiguration) =>
+                        {
+                            loggerConfiguration
+                                .ReadFrom.Configuration(hostingContext.Configuration)
+                                .Enrich.FromLogContext()
+                                .Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name)
+                                .Enrich.WithProperty("Environment", hostingContext.HostingEnvironment);
+                            #if DEBUG
+                            loggerConfiguration.Enrich.WithProperty("DebuggerAttached", Debugger.IsAttached);
+                            #endif
+                        });
                 });
     }
 }

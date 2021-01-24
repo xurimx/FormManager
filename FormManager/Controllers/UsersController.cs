@@ -1,5 +1,6 @@
 ﻿using FormManager.Api.Responses;
 using FormManager.Application.Common.Models;
+using FormManager.Application.Forms.Mappings.ViewModels;
 using FormManager.Application.Forms.Queries;
 using FormManager.Application.Users.Commands;
 using FormManager.Application.Users.Queries;
@@ -33,8 +34,8 @@ namespace FormManager.Api.Controllers
         }
 
         [HttpGet("{id}/forms")]
-        [ProducesResponseType(typeof(Pagination<Form>), 200)]
-        public async Task<Pagination<Form>> GetUserForms(string id)
+        [ProducesResponseType(typeof(Pagination<FormVM>), 200)]
+        public async Task<Pagination<FormVM>> GetUserForms(string id)
         {
             return await Mediator.Send(new GetFormsQuery { SearchInput = id, SearchColumns = new[] { "senderid" } });
         }

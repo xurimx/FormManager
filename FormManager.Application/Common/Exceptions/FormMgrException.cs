@@ -7,17 +7,15 @@ namespace FormManager.Application.Common.Exceptions
 {
     public class FormMgrException : Exception
     {
-        public FormMgrException() : base() { }
-
         public FormMgrException(string message, int status, List<Error> errors) : base(message)
         {
-            this.Status = status;
-            this.Errors = errors;
+            Status = status;
+            Errors = errors;
         }
 
         public FormMgrException(string message, int status) : base(message)
         {
-            this.Status = status;
+            Status = status;
         }
 
         public FormMgrException(string message) : base(message) { }

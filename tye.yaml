@@ -1,0 +1,16 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+extensions:
+- name: seq
+  logPath: ./.logs
+
+name: formmanager
+services:
+- name: formmanager-api
+  project: FormManager/FormManager.Api.csproj
+  bindings:
+  - port: 7000
