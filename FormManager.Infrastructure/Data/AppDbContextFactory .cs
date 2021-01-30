@@ -27,11 +27,8 @@ namespace FormManager.Infrastructure.Data
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
-            //optionsBuilder.UseMySql(config.GetConnectionString("MysqlConnection"), 
-            //    new MariaDbServerVersion(new Version(10, 4, 11)),
-            //            mySqlOptions => mySqlOptions
-            //                .CharSetBehavior(CharSetBehavior.NeverAppend));
+            //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseNpgsql(config.GetConnectionString("PostgresConnection"));
 
             return new AppDbContext(optionsBuilder.Options);
         }

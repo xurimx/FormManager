@@ -2,8 +2,32 @@ version: '3.4'
 
 volumes:
   local_postgres_data: {}
+  local_seq_data: {}
+  local_nginx_data: {}
 
 services:
+  reverse:
+    hostname: reverse
+    image: ${DOCKER_REGISTRY-}reverse.entrypoint
+    build:
+        context: reverse/
+        dockerfile: Dockerfile
+    ports: 
+        - "80:80"
+        - "443:443"
+    volumes:
+        - ./reverse/config:/etc/nginx
+    depends_on:
+        - frontend.vue
+  frontend.vue:
+    image: ${DOCKER_REGISTRY-}formmgr.vue
+    build:
+        context: clientapp/
+        dockerfile: Dockerfile
+        args: 
+        - API_SERVER=/api/  
+    depends_on:
+        - formmanager.api
   formmanager.api:
     image: ${DOCKER_REGISTRY-}formmanagerapi
     build:
@@ -15,9 +39,18 @@ services:
     depends_on:
       - db
   db:
-    image: postgres:11.1
+    image: postgres:13.1
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_USERNAME: postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
+  seq:
+    image: datalust/seq:latest
+    ports:
+      - 8090:80
+      - 5341:5341
+    environment:
+      ACCEPT_EULA: "Y"
+    volumes:
+      - local_seq_data:/data/Stream

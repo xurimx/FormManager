@@ -19,7 +19,9 @@ namespace FormManager.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+                //                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
+                options.UseNpgsql(configuration.GetConnectionString("PostgresConnection"),
                                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
 
             });

@@ -41,7 +41,6 @@ namespace FormManager.Api
             {
                 var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 ctx.Database.Migrate();
-                //bool v = ctx.Database.EnsureCreated();
 
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

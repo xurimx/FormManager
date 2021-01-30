@@ -1,8 +1,8 @@
 import axios from 'axios';
 import store from '../store/index';
 // let baseUrl = 'https://localhost:5001/api/';
-let baseUrl = 'https://formmanager.azurewebsites.net/api/';
-
+let baseUrl = process.env.VUE_APP_SERVER_API;
+console.log(process.env.VUE_APP_SERVER_API, 'server api')
 let api =  axios.create({
    baseURL: baseUrl
 });

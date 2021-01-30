@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using FormManager.Application.Common.Models;
+using FormManager.Application.Forms.Mappings.ViewModels;
 using FormManager.Application.Forms.Queries;
 using FormManager.Application.IntegrationTests;
 using FormManager.Domain.Entities;
@@ -31,7 +32,7 @@ namespace FormManager.Application.IntegrationTests.Forms.Queries
 
             var query = new GetFormsQuery();
 
-            Pagination<Form> result = await SendAsync(query);
+            Pagination<FormVM> result = await SendAsync(query);
 
 
             result.Should().NotBeNull();
