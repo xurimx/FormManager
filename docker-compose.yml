@@ -28,6 +28,8 @@ services:
         - API_SERVER=/api/  
     depends_on:
         - formmanager.api
+#    ports:
+#        - "8010:80"
   formmanager.api:
     image: ${DOCKER_REGISTRY-}formmanagerapi
     build:
